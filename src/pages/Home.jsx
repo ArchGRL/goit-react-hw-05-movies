@@ -20,7 +20,7 @@ export default function Home() {
         <ul>
           {favoriteMoviesList.map(({ id, title }) => (
             <li key={id}>
-              <Link to={`${id}`}>{title}</Link>
+              <Link to={`/movies/${id}`}>{title}</Link>
             </li>
           ))}
         </ul>

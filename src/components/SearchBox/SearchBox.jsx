@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const SearchBox = ({ onSearch }) => {
+const SearchBox = ({ value, onSearch, onChange }) => {
   const [query, setQuery] = useState('');
 
   const handleInputChange = e => {
-    setQuery(e.target.value);
+    setQuery(e.currentTarget.value);
+    onChange(e.currentTarget.value);
   };
 
   const handleSubmit = e => {

@@ -1,50 +1,41 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BtnSearch } from "../SearchBox/SearchBox.styled";
+import PropTypes from 'prop-types';
 
-const SearchBox = ({ value, onSearch, onChange }) => {
+const SearchBox = ({ onSearch }) => {
   const [query, setQuery] = useState('');
 
   const handleInputChange = e => {
-    setQuery(e.currentTarget.value);
-    onChange(e.currentTarget.value);
+    setQuery(e.currentTarget.value.toLowerCase());
   };
 
-  const handleSubmit = e => {
+  const handleSubmitForm = e => {
     e.preventDefault();
 
     if (query.trim() === '') {
-      toast('Please, fill in the search field.');
+      toast.error('Please, fill in the search field.');
       return;
     }
-
-    const options = { method: 'GET', headers: { accept: 'application/json' } };
-    fetch(
-      `
- https://api.themoviedb.org/3/search/movie?query=${query}&api_key=971dc393aaedcd6f3861b1889a452151`,
-      options
-    )
-      .then(response => response.json())
-      .then(dataMovie => {
-        console.log(dataMovie);
-        onSearch(dataMovie);
-      })
-      .catch(err => console.error(err));
-
-      setQuery('');
+    onSearch(query);
+    setQuery('');
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmitForm}>
       <input
         type="text"
         value={query}
         onChange={handleInputChange}
-        placeholder="Enter search query"
       />
-      <button type="submit">Search</button>
+      <BtnSearch type="submit">Search</BtnSearch>
     </form>
   );
+};
+
+SearchBox.propTypes = {
+  onSearch: PropTypes.func.isRequired,
 };
 
 export default SearchBox;

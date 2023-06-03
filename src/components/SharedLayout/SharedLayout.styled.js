@@ -14,8 +14,7 @@ export const Header = styled.header`
   gap: 12px;
   padding: 8px 0;
   margin-bottom: 16px;
-  border-bottom: 1px solid black;
-
+  box-shadow: 0px 3px 10px #111;
   > nav {
     display: flex;
   }
@@ -28,8 +27,8 @@ export const Link = styled(NavLink)`
   color: black;
   font-weight: 500;
 
-  &.active {
-    color: white;
-    background-color: orangered;
+  &.active,
+  :hover {
+    color: DeepPink;
   }
 `;

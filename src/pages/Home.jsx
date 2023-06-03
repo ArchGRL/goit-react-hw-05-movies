@@ -1,33 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { ListLink } from "../pages/Home.styled";
+import movieAPI from '../services/movie-api';
 
 export default function Home() {
-  const [favoriteMoviesList, setfavoriteMoviesList] = useState([]);
-  const [error, setError] = useState(null);
+  const [favoriteMoviesList, setFavoriteMoviesList] = useState([]);
+  const [error, setError] = useState('');
+  const location = useLocation();
 
   useEffect(() => {
-    const options = { method: 'GET', headers: { accept: 'application/json' } };
-
-   fetch('https://api.themoviedb.org/3/trending/movie/day?api_key=971dc393aaedcd6f3861b1889a452151&language=en-US', options)
-    .then(response => response.json())
-    .then(response => {console.log(response.results); setfavoriteMoviesList(response.results);})
-    .catch(error => setError(error.messag));
+    movieAPI
+      .getFavoriteMoviesList()
+      .then(response => {
+        setFavoriteMoviesList(response.results);
+      })
+      .catch(error => setError(error.message));
   }, []);
 
   return (
     <div>
+      <h1>Trending today</h1>
       {favoriteMoviesList.length >= 1 && (
-        <ul>
+        <ol>
           {favoriteMoviesList.map(({ id, title }) => (
             <li key={id}>
-              <Link to={`/movies/${id}`}>{title}</Link>
+              <ListLink to={`/movies/${id}`} state={{ from: location }}>
+                {title}
+              </ListLink>
             </li>
           ))}
-        </ul>
+        </ol>
       )}
-      {error !== '' && (
-        <h1>{error}</h1>
-      )}
+      {error !== '' && <h1>{error}</h1>}
     </div>
   );
 }
